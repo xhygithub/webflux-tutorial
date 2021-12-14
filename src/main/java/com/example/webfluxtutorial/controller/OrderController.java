@@ -31,4 +31,24 @@ public class OrderController {
                     return Mono.just(Collections.emptyList());
                 });
     }
+
+    @GetMapping(value = "/zip")
+    public Mono<ServiceRecord> useZip(){
+        return orderService.useZip();
+    }
+
+    @GetMapping(value = "/zipAndMapIsNotPerformWhenGetMonoIsEmpty")
+    public Mono<ServiceRecord> useZipAndMapIsNotPerformWhenGetMonoIsEmpty(){
+        return orderService.useZipAndMapIsNotPerformWhenGetMonoIsEmpty();
+    }
+
+    @GetMapping(value = "/zipAndMapIsPerformWhenGetMonoIsEmptyButHasDefault")
+    public Mono<ServiceRecord> useZipAndMapIsPerformWhenGetMonoIsEmptyButHasDefault(){
+        return orderService.useZipAndMapIsPerformWhenGetMonoIsEmptyButHasDefault();
+    }
+
+    @GetMapping(value = "/zipWhenGetMonoIsOptional")
+    public Mono<ServiceRecord> useZipWhenGetMonoIsOptional(){
+        return orderService.useZipWhenGetMonoIsOptional();
+    }
 }
