@@ -56,4 +56,9 @@ public class OrderController {
     public Mono<ServiceRecord> useZipWith(){
         return orderService.useZipWith();
     }
+
+    @GetMapping(value = "/zipWhen")
+    public Mono<ServiceRecord> useZipWhen(){
+        return orderService.useZipWhen();
+    }
 }

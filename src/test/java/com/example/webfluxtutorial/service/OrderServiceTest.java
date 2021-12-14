@@ -142,4 +142,36 @@ class OrderServiceTest {
                     assertThat(serviceRecord.getOrderNumber()).isEqualTo("zipWithIsNotPerform");
                 }).verifyComplete();
     }
+
+    @Test
+    void should_return_right_service_record_when_use_zipWhen(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").serviceOrderId("orderId").build()));
+        when(userClient.getUserByOrderNumber("orderNumber"))
+                .thenReturn(Mono.just(User.builder().dealerId("dealerId").build()));
+
+        Mono<ServiceRecord> serviceRecordMono = orderService.useZipWhen();
+
+        StepVerifier.create(serviceRecordMono)
+                .consumeNextWith(serviceRecord -> {
+                    assertThat(serviceRecord.getServiceOrderId()).isEqualTo("orderId");
+                    assertThat(serviceRecord.getDealerId()).isEqualTo("dealerId");
+                }).verifyComplete();
+    }
+
+    @Test
+    void should_return_right_service_record_when_use_zipWhen_empty_mono(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").serviceOrderId("orderId").build()));
+        when(userClient.getUserByOrderNumber("orderNumber"))
+                .thenReturn(Mono.empty());
+
+        Mono<ServiceRecord> serviceRecordMono = orderService.useZipWhen();
+
+        StepVerifier.create(serviceRecordMono)
+                .consumeNextWith(serviceRecord -> {
+                    assertThat(serviceRecord.getServiceOrderId()).isNull();
+                    assertThat(serviceRecord.getOrderNumber()).isEqualTo("mapIsNotPerform");
+                }).verifyComplete();
+    }
 }

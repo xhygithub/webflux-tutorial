@@ -123,4 +123,19 @@ class OrderControllerTest extends WebfluxTestBase {
             assertThat(records.getId()).isEqualTo("id");
         }).verifyComplete();
     }
+
+    @Test
+    void should_return_service_record_when_call_zipWhen_api(){
+        when(orderService.useZipWhen()).thenReturn(Mono.just(ServiceRecord.builder().id("id").build()));
+        Flux<ServiceRecord> responseBody = testClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/orders/zipWhen").build())
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .returnResult(ServiceRecord.class)
+                .getResponseBody();
+        StepVerifier.create(responseBody).consumeNextWith(records -> {
+            assertThat(records.getId()).isEqualTo("id");
+        }).verifyComplete();
+    }
 }

@@ -45,7 +45,7 @@ public class OrderService {
                 .map(objects -> {
                     Order orderDto = objects.getT1();
                     User userDto = objects.getT2();
-                    if (userDto.getDealerId() == null){
+                    if (userDto.getDealerId() == null) {
                         return ServiceRecord.builder()
                                 .serviceOrderId(orderDto.getServiceOrderId())
                                 .build();
@@ -65,7 +65,7 @@ public class OrderService {
                 .map(objects -> {
                     Order orderDto = objects.getT1();
                     User userDto = objects.getT2();
-                    if (userDto.getDealerId() == null){
+                    if (userDto.getDealerId() == null) {
                         return ServiceRecord.builder()
                                 .serviceOrderId(orderDto.getServiceOrderId())
                                 .build();
@@ -85,7 +85,7 @@ public class OrderService {
                 .map(objects -> {
                     Optional<Order> orderOptional = objects.getT1();
                     Optional<User> userOptional = objects.getT2();
-                    if (userOptional.isPresent() && orderOptional.isPresent()){
+                    if (userOptional.isPresent() && orderOptional.isPresent()) {
                         return ServiceRecord.builder()
                                 .serviceOrderId(orderOptional.get().getServiceOrderId())
                                 .dealerId(userOptional.get().getDealerId())
@@ -110,5 +110,19 @@ public class OrderService {
                             .build();
                 })
                 .switchIfEmpty(Mono.just(ServiceRecord.builder().orderNumber("zipWithIsNotPerform").build()));
+    }
+
+    public Mono<ServiceRecord> useZipWhen() {
+        return orderClient.getOrder()
+                .zipWhen(order -> userClient.getUserByOrderNumber(order.getOrderNumber()))
+                .map(objects -> {
+                    Order orderDto = objects.getT1();
+                    User userDto = objects.getT2();
+                    return ServiceRecord.builder()
+                            .serviceOrderId(orderDto.getServiceOrderId())
+                            .dealerId(userDto.getDealerId())
+                            .build();
+                })
+                .switchIfEmpty(Mono.just(ServiceRecord.builder().orderNumber("mapIsNotPerform").build()));
     }
 }

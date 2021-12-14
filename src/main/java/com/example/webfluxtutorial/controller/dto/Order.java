@@ -13,4 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Order {
     private String serviceOrderId;
+
+    private String orderNumber;
 }
