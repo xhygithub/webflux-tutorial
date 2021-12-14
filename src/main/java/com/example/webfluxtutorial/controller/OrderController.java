@@ -22,7 +22,7 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
 
-    @GetMapping()
+    @GetMapping(value = "/useOnErrorResume")
     @ResponseStatus(HttpStatus.OK)
     public Mono<List<ServiceRecord>> getAllOrders() {
         return orderService.getAllOrders()
@@ -50,5 +50,10 @@ public class OrderController {
     @GetMapping(value = "/zipWhenGetMonoIsOptional")
     public Mono<ServiceRecord> useZipWhenGetMonoIsOptional(){
         return orderService.useZipWhenGetMonoIsOptional();
+    }
+
+    @GetMapping(value = "/zipWith")
+    public Mono<ServiceRecord> useZipWith(){
+        return orderService.useZipWith();
     }
 }

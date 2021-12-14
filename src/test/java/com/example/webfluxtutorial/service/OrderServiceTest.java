@@ -114,4 +114,32 @@ class OrderServiceTest {
                     assertThat(serviceRecord.getOrderNumber()).isNull();
                 }).verifyComplete();
     }
+
+    @Test
+    void should_return_right_service_record_when_use_zipWith(){
+        when(orderClient.getOrder()).thenReturn(Mono.just(Order.builder().serviceOrderId("orderId").build()));
+        when(userClient.getUser()).thenReturn(Mono.just(User.builder().dealerId("dealerId").build()));
+
+        Mono<ServiceRecord> serviceRecordMono = orderService.useZipWith();
+
+        StepVerifier.create(serviceRecordMono)
+                .consumeNextWith(serviceRecord -> {
+                    assertThat(serviceRecord.getServiceOrderId()).isEqualTo("orderId");
+                    assertThat(serviceRecord.getDealerId()).isEqualTo("dealerId");
+                }).verifyComplete();
+    }
+
+    @Test
+    void should_return_right_service_record_when_use_zipWith_empty_mono(){
+        when(orderClient.getOrder()).thenReturn(Mono.just(Order.builder().serviceOrderId("orderId").build()));
+        when(userClient.getUser()).thenReturn(Mono.empty());
+
+        Mono<ServiceRecord> serviceRecordMono = orderService.useZipWith();
+
+        StepVerifier.create(serviceRecordMono)
+                .consumeNextWith(serviceRecord -> {
+                    assertThat(serviceRecord.getServiceOrderId()).isNull();
+                    assertThat(serviceRecord.getOrderNumber()).isEqualTo("zipWithIsNotPerform");
+                }).verifyComplete();
+    }
 }

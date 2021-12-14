@@ -96,4 +96,19 @@ public class OrderService {
                 })
                 .switchIfEmpty(Mono.just(ServiceRecord.builder().orderNumber("mapIsNotPerform").build()));
     }
+
+    public Mono<ServiceRecord> useZipWith() {
+        Mono<Order> order = orderClient.getOrder();
+        Mono<User> user = userClient.getUser();
+        return order.zipWith(user)
+                .map(objects -> {
+                    Order orderDto = objects.getT1();
+                    User userDto = objects.getT2();
+                    return ServiceRecord.builder()
+                            .serviceOrderId(orderDto.getServiceOrderId())
+                            .dealerId(userDto.getDealerId())
+                            .build();
+                })
+                .switchIfEmpty(Mono.just(ServiceRecord.builder().orderNumber("zipWithIsNotPerform").build()));
+    }
 }
