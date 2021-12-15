@@ -28,6 +28,9 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<List<ServiceRecord>> getAllOrders() {
         return orderService.getAllOrders()
+                .doOnNext(item -> {
+                    log.info("orders is: {}", item);
+                })
                 .onErrorResume(error -> {
                     log.error("no orders find");
                     return Mono.just(Collections.emptyList());
