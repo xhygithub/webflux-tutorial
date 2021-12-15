@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -143,5 +144,22 @@ public class OrderService {
     public Mono<Order> useDoOnNext() {
         return orderClient.getOrder()
                 .doOnNext(order -> order.setServiceOrderId("doOnNext"));
+    }
+
+    public Mono<Void> userMonoVoid() {
+        return orderClient.getOrder()
+                .flatMap(order -> {
+                    if (Objects.equals(order.getOrderNumber(), "orderNumber")) {
+                        return orderClient.deleteOrderByOrderNumber("orderNumber");
+                    }
+                    return Mono.empty();
+                });
+
+    }
+
+    public Mono<Void> userMonoVoidWithThen() {
+        return orderClient.getOrder()
+                .flatMap(order -> orderClient.updateOrderByOrderNumber(order.getOrderNumber()))
+                .then();
     }
 }

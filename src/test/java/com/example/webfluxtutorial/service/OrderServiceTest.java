@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class OrderServiceTest {
@@ -229,5 +230,30 @@ class OrderServiceTest {
                 .consumeNextWith(order -> {
                     assertThat(order.getServiceOrderId()).isEqualTo("doOnNext");
                 }).verifyComplete();
+    }
+
+    @Test
+    void should_return_right_user_when_use_MonoVoid(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
+        when(orderClient.deleteOrderByOrderNumber("orderNumber")).thenReturn(Mono.empty());
+
+        Mono<Void> voidMono = orderService.userMonoVoid();
+
+        StepVerifier.create(voidMono).verifyComplete();
+        verify(orderClient).deleteOrderByOrderNumber("orderNumber");
+    }
+
+    @Test
+    void should_return_right_user_when_use_MonoVoidWithThen(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
+        when(orderClient.updateOrderByOrderNumber("orderNumber"))
+                .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
+
+        Mono<Void> voidMono = orderService.userMonoVoidWithThen();
+
+        StepVerifier.create(voidMono).verifyComplete();
+        verify(orderClient).updateOrderByOrderNumber("orderNumber");
     }
 }

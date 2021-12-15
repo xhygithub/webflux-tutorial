@@ -154,4 +154,17 @@ class OrderControllerTest extends WebfluxTestBase {
             assertThat(user.getDealerId()).isEqualTo("dealerId");
         }).verifyComplete();
     }
+
+    @Test
+    void should_return_user_when_call_monoVoid_api(){
+        when(orderService.userMonoVoid()).thenReturn(Mono.empty());
+        Flux<Void> responseBody = testClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/orders/monoVoid").build())
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .returnResult(Void.class)
+                .getResponseBody();
+        StepVerifier.create(responseBody).verifyComplete();
+    }
 }

@@ -78,4 +78,14 @@ public class OrderController {
     public Mono<Order> useDoOnNext(){
         return orderService.useDoOnNext();
     }
+
+    @GetMapping(value = "/monoVoid")
+    public Mono<Void>  useMonoVoid() {
+        return orderService.userMonoVoid();
+    }
+
+    @GetMapping(value = "/monoVoidWithThen")
+    public Mono<Void>  useMonoVoidWithThen() {
+        return orderService.userMonoVoidWithThen();
+    }
 }
