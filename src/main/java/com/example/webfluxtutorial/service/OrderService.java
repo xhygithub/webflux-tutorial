@@ -131,4 +131,14 @@ public class OrderService {
                 .switchIfEmpty(Mono.just(Order.builder().orderNumber("switchIfEmpty").build()))
                 .flatMap(order -> userClient.getUserByOrderNumber(order.getOrderNumber()));
     }
+
+    public Mono<User> useMap() {
+        return orderClient.getOrder()
+                .map(order -> {
+                    order.setServiceOrderId("anySet");
+                    return User.builder().dealerId("useMap").build();
+                });
+    }
+
+
 }

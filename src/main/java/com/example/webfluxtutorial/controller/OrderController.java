@@ -67,4 +67,9 @@ public class OrderController {
     public Mono<User> useFlatMap(){
         return orderService.useFlatMap();
     }
+
+    @GetMapping(value = "/map")
+    public Mono<User> useMap(){
+        return orderService.useMap();
+    }
 }

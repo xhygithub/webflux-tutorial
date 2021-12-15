@@ -204,4 +204,17 @@ class OrderServiceTest {
                     assertThat(user.getDealerId()).isEqualTo("switchIfEmpty");
                 }).verifyComplete();
     }
+
+    @Test
+    void should_return_right_user_when_use_map(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().build()));
+
+        Mono<User> userMono = orderService.useMap();
+
+        StepVerifier.create(userMono)
+                .consumeNextWith(user -> {
+                    assertThat(user.getDealerId()).isEqualTo("useMap");
+                }).verifyComplete();
+    }
 }
