@@ -1,6 +1,7 @@
 package com.example.webfluxtutorial.controller;
 
 import com.example.webfluxtutorial.controller.dto.ServiceRecord;
+import com.example.webfluxtutorial.controller.dto.User;
 import com.example.webfluxtutorial.service.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,5 +61,10 @@ public class OrderController {
     @GetMapping(value = "/zipWhen")
     public Mono<ServiceRecord> useZipWhen(){
         return orderService.useZipWhen();
+    }
+
+    @GetMapping(value = "/flatMap")
+    public Mono<User> useFlatMap(){
+        return orderService.useFlatMap();
     }
 }

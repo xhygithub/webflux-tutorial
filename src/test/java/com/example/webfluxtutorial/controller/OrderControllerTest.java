@@ -2,6 +2,7 @@ package com.example.webfluxtutorial.controller;
 
 import com.example.webfluxtutorial.WebfluxTestBase;
 import com.example.webfluxtutorial.controller.dto.ServiceRecord;
+import com.example.webfluxtutorial.controller.dto.User;
 import com.example.webfluxtutorial.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -136,6 +137,21 @@ class OrderControllerTest extends WebfluxTestBase {
                 .getResponseBody();
         StepVerifier.create(responseBody).consumeNextWith(records -> {
             assertThat(records.getId()).isEqualTo("id");
+        }).verifyComplete();
+    }
+
+    @Test
+    void should_return_user_when_call_flatMap_api(){
+        when(orderService.useFlatMap()).thenReturn(Mono.just(User.builder().dealerId("dealerId").build()));
+        Flux<User> responseBody = testClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/orders/flatMap").build())
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .returnResult(User.class)
+                .getResponseBody();
+        StepVerifier.create(responseBody).consumeNextWith(user -> {
+            assertThat(user.getDealerId()).isEqualTo("dealerId");
         }).verifyComplete();
     }
 }

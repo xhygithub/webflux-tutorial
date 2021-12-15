@@ -174,4 +174,34 @@ class OrderServiceTest {
                     assertThat(serviceRecord.getOrderNumber()).isEqualTo("mapIsNotPerform");
                 }).verifyComplete();
     }
+
+    @Test
+    void should_return_right_user_when_use_flatMap(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
+        when(userClient.getUserByOrderNumber("orderNumber"))
+                .thenReturn(Mono.just(User.builder().dealerId("dealerId").build()));
+
+        Mono<User> userMono = orderService.useFlatMap();
+
+        StepVerifier.create(userMono)
+                .consumeNextWith(user -> {
+                    assertThat(user.getDealerId()).isEqualTo("dealerId");
+                }).verifyComplete();
+    }
+
+    @Test
+    void should_return_right_user_when_use_flatMap_and_mono_is_empty(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.empty());
+        when(userClient.getUserByOrderNumber("switchIfEmpty"))
+                .thenReturn(Mono.just(User.builder().dealerId("switchIfEmpty").build()));
+
+        Mono<User> userMono = orderService.useFlatMap();
+
+        StepVerifier.create(userMono)
+                .consumeNextWith(user -> {
+                    assertThat(user.getDealerId()).isEqualTo("switchIfEmpty");
+                }).verifyComplete();
+    }
 }

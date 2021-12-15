@@ -125,4 +125,10 @@ public class OrderService {
                 })
                 .switchIfEmpty(Mono.just(ServiceRecord.builder().orderNumber("mapIsNotPerform").build()));
     }
+
+    public Mono<User> useFlatMap() {
+        return orderClient.getOrder()
+                .switchIfEmpty(Mono.just(Order.builder().orderNumber("switchIfEmpty").build()))
+                .flatMap(order -> userClient.getUserByOrderNumber(order.getOrderNumber()));
+    }
 }
