@@ -140,5 +140,8 @@ public class OrderService {
                 });
     }
 
-
+    public Mono<Order> useDoOnNext() {
+        return orderClient.getOrder()
+                .doOnNext(order -> order.setServiceOrderId("doOnNext"));
+    }
 }

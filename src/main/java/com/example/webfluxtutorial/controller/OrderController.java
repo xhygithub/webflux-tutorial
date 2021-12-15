@@ -1,5 +1,6 @@
 package com.example.webfluxtutorial.controller;
 
+import com.example.webfluxtutorial.controller.dto.Order;
 import com.example.webfluxtutorial.controller.dto.ServiceRecord;
 import com.example.webfluxtutorial.controller.dto.User;
 import com.example.webfluxtutorial.service.OrderService;
@@ -71,5 +72,10 @@ public class OrderController {
     @GetMapping(value = "/map")
     public Mono<User> useMap(){
         return orderService.useMap();
+    }
+
+    @GetMapping(value = "/doOnNext")
+    public Mono<Order> useDoOnNext(){
+        return orderService.useDoOnNext();
     }
 }

@@ -217,4 +217,17 @@ class OrderServiceTest {
                     assertThat(user.getDealerId()).isEqualTo("useMap");
                 }).verifyComplete();
     }
+
+    @Test
+    void should_return_right_user_when_use_doOnNext(){
+        when(orderClient.getOrder())
+                .thenReturn(Mono.just(Order.builder().build()));
+
+        Mono<Order> orderMono = orderService.useDoOnNext();
+
+        StepVerifier.create(orderMono)
+                .consumeNextWith(order -> {
+                    assertThat(order.getServiceOrderId()).isEqualTo("doOnNext");
+                }).verifyComplete();
+    }
 }
