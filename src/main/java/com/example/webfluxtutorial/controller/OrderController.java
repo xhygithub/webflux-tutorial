@@ -6,6 +6,7 @@ import com.example.webfluxtutorial.controller.dto.User;
 import com.example.webfluxtutorial.service.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,7 +94,12 @@ public class OrderController {
     }
 
     @GetMapping(value = "/monoThenReturn")
-    public Mono<Order> userMonoThenReturn(){
+    public Mono<Order> useMonoThenReturn(){
         return orderService.useThenReturn();
+    }
+
+    @GetMapping(value = "/monoFilter")
+    public Mono<Order> useMonoFilter(){
+        return orderService.useMonoFilter();
     }
 }

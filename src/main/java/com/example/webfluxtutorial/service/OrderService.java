@@ -4,8 +4,8 @@ import com.example.webfluxtutorial.client.OrderClient;
 import com.example.webfluxtutorial.client.UserClient;
 import com.example.webfluxtutorial.controller.dto.Order;
 import com.example.webfluxtutorial.controller.dto.ServiceRecord;
-import lombok.AllArgsConstructor;
 import com.example.webfluxtutorial.controller.dto.User;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 @AllArgsConstructor
@@ -166,5 +168,10 @@ public class OrderService {
     public Mono<Order> useThenReturn() {
         return orderClient.deleteOrderByOrderNumber("any")
                 .thenReturn(Order.builder().orderNumber("return").build());
+    }
+
+    public Mono<Order> useMonoFilter() {
+        return orderClient.getOrder()
+                .filter(order -> !isEmpty(order.getOrderNumber()));
     }
 }

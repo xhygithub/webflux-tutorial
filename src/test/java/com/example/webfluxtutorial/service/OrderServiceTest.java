@@ -267,4 +267,24 @@ class OrderServiceTest {
             assertThat(order.getOrderNumber()).isEqualTo("return");
         }).verifyComplete();
     }
+
+    @Test
+    void should_return_order_when_use_monoFilter_and_has_order_number(){
+        when(orderClient.getOrder()).thenReturn(Mono.just(Order.builder().orderNumber("has").build()));
+
+        Mono<Order> orderMono = orderService.useMonoFilter();
+
+        StepVerifier.create(orderMono).consumeNextWith(order -> {
+            assertThat(order.getOrderNumber()).isEqualTo("has");
+        }).verifyComplete();
+    }
+
+    @Test
+    void should_return_mono_empty_when_use_monoFilter_and_not_has_order_number(){
+        when(orderClient.getOrder()).thenReturn(Mono.just(Order.builder().build()));
+
+        Mono<Order> orderMono = orderService.useMonoFilter();
+
+        StepVerifier.create(orderMono).verifyComplete();
+    }
 }
