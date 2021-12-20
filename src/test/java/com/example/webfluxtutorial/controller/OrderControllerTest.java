@@ -157,7 +157,7 @@ class OrderControllerTest extends WebfluxTestBase {
 
     @Test
     void should_return_user_when_call_monoVoid_api(){
-        when(orderService.userMonoVoid()).thenReturn(Mono.empty());
+        when(orderService.useMonoVoid()).thenReturn(Mono.empty());
         Flux<Void> responseBody = testClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/orders/monoVoid").build())
                 .exchange()

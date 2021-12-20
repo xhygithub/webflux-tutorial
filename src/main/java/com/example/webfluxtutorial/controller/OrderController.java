@@ -84,11 +84,16 @@ public class OrderController {
 
     @GetMapping(value = "/monoVoid")
     public Mono<Void>  useMonoVoid() {
-        return orderService.userMonoVoid();
+        return orderService.useMonoVoid();
     }
 
     @GetMapping(value = "/monoVoidWithThen")
     public Mono<Void>  useMonoVoidWithThen() {
-        return orderService.userMonoVoidWithThen();
+        return orderService.useMonoVoidWithThen();
+    }
+
+    @GetMapping(value = "/monoThenReturn")
+    public Mono<Order> userMonoThenReturn(){
+        return orderService.useThenReturn();
     }
 }

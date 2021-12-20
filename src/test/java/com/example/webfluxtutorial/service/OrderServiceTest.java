@@ -233,27 +233,38 @@ class OrderServiceTest {
     }
 
     @Test
-    void should_return_right_user_when_use_MonoVoid(){
+    void should_return_right_user_when_use_monoVoid(){
         when(orderClient.getOrder())
                 .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
         when(orderClient.deleteOrderByOrderNumber("orderNumber")).thenReturn(Mono.empty());
 
-        Mono<Void> voidMono = orderService.userMonoVoid();
+        Mono<Void> voidMono = orderService.useMonoVoid();
 
         StepVerifier.create(voidMono).verifyComplete();
         verify(orderClient).deleteOrderByOrderNumber("orderNumber");
     }
 
     @Test
-    void should_return_right_user_when_use_MonoVoidWithThen(){
+    void should_return_right_user_when_use_monoVoidWithThen(){
         when(orderClient.getOrder())
                 .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
         when(orderClient.updateOrderByOrderNumber("orderNumber"))
                 .thenReturn(Mono.just(Order.builder().orderNumber("orderNumber").build()));
 
-        Mono<Void> voidMono = orderService.userMonoVoidWithThen();
+        Mono<Void> voidMono = orderService.useMonoVoidWithThen();
 
         StepVerifier.create(voidMono).verifyComplete();
         verify(orderClient).updateOrderByOrderNumber("orderNumber");
+    }
+
+    @Test
+    void should_return_order_when_use_monoThenReturn(){
+        when(orderClient.deleteOrderByOrderNumber("any")).thenReturn(Mono.empty());
+
+        Mono<Order> orderMono = orderService.useThenReturn();
+
+        StepVerifier.create(orderMono).consumeNextWith(order -> {
+            assertThat(order.getOrderNumber()).isEqualTo("return");
+        }).verifyComplete();
     }
 }

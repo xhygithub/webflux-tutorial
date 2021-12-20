@@ -146,7 +146,7 @@ public class OrderService {
                 .doOnNext(order -> order.setServiceOrderId("doOnNext"));
     }
 
-    public Mono<Void> userMonoVoid() {
+    public Mono<Void> useMonoVoid() {
         return orderClient.getOrder()
                 .flatMap(order -> {
                     if (Objects.equals(order.getOrderNumber(), "orderNumber")) {
@@ -157,9 +157,14 @@ public class OrderService {
 
     }
 
-    public Mono<Void> userMonoVoidWithThen() {
+    public Mono<Void> useMonoVoidWithThen() {
         return orderClient.getOrder()
                 .flatMap(order -> orderClient.updateOrderByOrderNumber(order.getOrderNumber()))
                 .then();
+    }
+
+    public Mono<Order> useThenReturn() {
+        return orderClient.deleteOrderByOrderNumber("any")
+                .thenReturn(Order.builder().orderNumber("return").build());
     }
 }
