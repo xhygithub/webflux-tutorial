@@ -7,6 +7,7 @@ import com.example.webfluxtutorial.controller.dto.ServiceRecord;
 import com.example.webfluxtutorial.controller.dto.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
@@ -173,5 +174,16 @@ public class OrderService {
     public Mono<Order> useMonoFilter() {
         return orderClient.getOrder()
                 .filter(order -> !isEmpty(order.getOrderNumber()));
+    }
+
+    public Mono<List<Order>> useFluxFromIterable() {
+        return orderClient.getAllOrders()
+                .flatMap(serviceRecords -> Flux.fromIterable(serviceRecords)
+                        .flatMap(serviceRecord -> {
+                            String orderNumber = serviceRecord.getOrderNumber();
+                            return orderClient.deleteOrderByOrderNumber(orderNumber)
+                                    .thenReturn(Order.builder().orderNumber(orderNumber).build());
+                        }).collectList()
+                );
     }
 }

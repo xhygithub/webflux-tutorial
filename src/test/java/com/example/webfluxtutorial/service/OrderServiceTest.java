@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -286,5 +287,25 @@ class OrderServiceTest {
         Mono<Order> orderMono = orderService.useMonoFilter();
 
         StepVerifier.create(orderMono).verifyComplete();
+    }
+
+    @Test
+    void should_return_mono_list_when_use_flux_fromIterable(){
+        when(orderClient.getAllOrders())
+                .thenReturn(Mono.just(
+                        List.of(ServiceRecord.builder().orderNumber("o1").build(),
+                                ServiceRecord.builder().orderNumber("o2").build(),
+                                ServiceRecord.builder().orderNumber("o3").build())));
+        when(orderClient.deleteOrderByOrderNumber(anyString())).thenReturn(Mono.empty());
+
+        Mono<List<Order>> listMono = orderService.useFluxFromIterable();
+
+        StepVerifier.create(listMono)
+                .consumeNextWith(orders -> {
+                    assertThat(orders.size()).isEqualTo(3);
+                    assertThat(orders.get(0).getOrderNumber()).isEqualTo("o1");
+                    assertThat(orders.get(1).getOrderNumber()).isEqualTo("o2");
+                    assertThat(orders.get(2).getOrderNumber()).isEqualTo("o3");
+                }).verifyComplete();
     }
 }

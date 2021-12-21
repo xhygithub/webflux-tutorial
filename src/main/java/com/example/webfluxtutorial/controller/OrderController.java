@@ -102,4 +102,9 @@ public class OrderController {
     public Mono<Order> useMonoFilter(){
         return orderService.useMonoFilter();
     }
+
+    @GetMapping(value = "/fluxFromIterable")
+    public Mono<List<Order>> useFluxFromIterable(){
+        return orderService.useFluxFromIterable();
+    }
 }
