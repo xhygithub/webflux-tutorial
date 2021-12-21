@@ -186,4 +186,8 @@ public class OrderService {
                         }).collectList()
                 );
     }
+
+    public Mono<Optional<Order>> getOptionalOrder() {
+        return Mono.just(Optional.of(Order.builder().orderNumber("ooo").build()));
+    }
 }

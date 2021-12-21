@@ -3,6 +3,7 @@ package com.example.webfluxtutorial.controller.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -31,4 +32,6 @@ public class ServiceRecord {
     private String reservationCustomerName;
 
     private String reservationCustomerLastName;
+
+    private Date lastChangeDate;
 }
