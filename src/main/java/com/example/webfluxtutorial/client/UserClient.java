@@ -1,5 +1,6 @@
 package com.example.webfluxtutorial.client;
 
+import com.example.webfluxtutorial.config.HeaderInterceptorConfiguration;
 import com.example.webfluxtutorial.controller.dto.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,7 +9,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-@ReactiveFeignClient(name = "user-management")
+@ReactiveFeignClient(name = "user-management",
+        configuration = {HeaderInterceptorConfiguration.class} //passing Mono context into request header
+)
 public interface UserClient {
     @GetMapping(value = "/user")
     Mono<User> getUser();

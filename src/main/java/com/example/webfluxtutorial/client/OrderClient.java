@@ -1,5 +1,6 @@
 package com.example.webfluxtutorial.client;
 
+import com.example.webfluxtutorial.config.HeaderInterceptorConfiguration;
 import com.example.webfluxtutorial.controller.dto.Order;
 import com.example.webfluxtutorial.controller.dto.ServiceRecord;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Optional;
 
-@ReactiveFeignClient(name = "order-management")
+@ReactiveFeignClient(name = "order-management", configuration = {HeaderInterceptorConfiguration.class})
 public interface OrderClient {
     @GetMapping(value = "/orders")
     Mono<List<ServiceRecord>> getAllOrders();
