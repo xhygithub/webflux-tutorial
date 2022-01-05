@@ -1,7 +1,9 @@
 ## Mono - 基本使用
 1、try/catch  error   doOnError
+> 针对Mono中对异常处理
 
 2、zip    zipWith    zipWhen（defaultIfEmpty/switchIfEmpty）
+> 需要对多个异步操作一起处理可用zip相关方法
 
 3、flatmap    map    doOnNext
 > flatmap：处理接下来还有异步操作的代码
@@ -11,12 +13,17 @@
 > doOnNext：处理同步操作，不返回任何值，例如set方法
 
 4、Mono<Void>    then    方法返回为Mono.empty()
+> 当返回值Mono<其他类型>时，方法又需要返回为Mono<Void>形式，可以使用then；
+> 或者返回Mono.empty()
 
-5、Mono.fiter
+5、Mono.filter
+> 对Mono类型对值进行过滤，方法类似于stream中filter
 
 6、List<Mono> —> Mono<List>    Flux.fromIterable
+> 对List集合中的元素进行异步处理时，需要用Flux.fromIterable
 
 7、Mono<Optional>    Optional.empty       Optional.of(null)
+> 当使用webflux框架时，Mono<Optional>在前端显示的会不是详细json内容，需要注册{registerModule(new Jdk8Module())}
 
 ## DateFormat 处理
 
