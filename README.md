@@ -1,7 +1,31 @@
+## Mono - 基本使用
+1、try/catch  error   doOnError
 
+2、zip    zipWith    zipWhen（defaultIfEmpty/switchIfEmpty）
 
+3、flatmap    map    doOnNext
+> flatmap：处理接下来还有异步操作的代码
+>
+> map：处理同步操作，同时需要返回其他类型的Mono
+> 
+> doOnNext：处理同步操作，不返回任何值，例如set方法
 
+4、Mono<Void>    then    方法返回为Mono.empty()
 
+5、Mono.fiter
+
+6、List<Mono> —> Mono<List>    Flux.fromIterable
+
+7、Mono<Optional>    Optional.empty       Optional.of(null)
+
+## DateFormat 处理
+
+yml文件中配置了
+Jackson.date-format = yyyy-MM-dd'T'HH:mm:ss.SSS’Z’  
+当使用了@EnableWebFlux或者@EnableWebFlux注解时   
+yml中的配置就不会生效
+想要全局设置时间格式，就需要自己去重写关于时间格式控制的方法——>
+可参考config下的JsonDateFormat文件
 
 
 ## redis - start redis to test
