@@ -1,4 +1,4 @@
-## Mono - 基本使用
+## Mono - 基本使用（具体参考OrderController）
 1、try/catch  error   doOnError
 > 针对Mono中对异常处理
 
@@ -23,7 +23,8 @@
 > 对List集合中的元素进行异步处理时，需要用Flux.fromIterable
 
 7、Mono<Optional>    Optional.empty       Optional.of(null)
-> 当使用webflux框架时，Mono<Optional>在前端显示的会不是详细json内容，需要注册{registerModule(new Jdk8Module())}
+> 当使用webflux框架时，Mono<Optional>在前端显示的会不是详细json内容，需要注册{registerModule(new Jdk8Module())}，
+> 可参考config下的JsonDateFormat文件中的相关配置
 
 ## DateFormat 处理
 
